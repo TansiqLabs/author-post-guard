@@ -173,5 +173,5 @@ GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html) for de
 ---
 
 <p align="center">
-  Made with ♥ by <a href="https://tansiqlabs.com">Tansiq Labs</a>
+   Developed by <a href="https://tansiqlabs.com">Tansiq Labs</a>
 </p>

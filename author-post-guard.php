@@ -6,8 +6,8 @@
  * Version: 1.0.0
  * Author: Tansiq Labs
  * Author URI: https://tansiqlabs.com
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * License: MIT
+ * License URI: https://opensource.org/licenses/MIT
  * Text Domain: author-post-guard
  * Domain Path: /languages
  * Requires at least: 5.8
@@ -125,6 +125,10 @@ final class Author_Post_Guard {
         // Menu control hooks
         add_action( 'admin_menu', array( $this, 'control_admin_menu' ), 999 );
         add_action( 'admin_init', array( $this, 'control_admin_submenus' ), 999 );
+
+        // Media library restrictions
+        add_filter( 'ajax_query_attachments_args', array( $this, 'restrict_media_library' ) );
+        add_filter( 'pre_get_posts', array( $this, 'restrict_media_library_list' ) );
     }
 
     /**
@@ -361,6 +365,62 @@ final class Author_Post_Guard {
                 }
             }
         }
+    }
+
+    /**
+     * Restrict media library to user's own uploads
+     *
+     * @param array $query Query args
+     * @return array Modified query
+     */
+    public function restrict_media_library( $query ) {
+        $options = get_option( 'apg_settings', array() );
+        
+        if ( empty( $options['restrict_media_library'] ) ) {
+            return $query;
+        }
+
+        $user = wp_get_current_user();
+        
+        // Don't restrict administrators
+        if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+            return $query;
+        }
+
+        // Restrict to user's own uploads
+        $query['author'] = get_current_user_id();
+        
+        return $query;
+    }
+
+    /**
+     * Restrict media library list view
+     *
+     * @param WP_Query $query Query object
+     * @return void
+     */
+    public function restrict_media_library_list( $query ) {
+        global $pagenow;
+        
+        if ( 'upload.php' !== $pagenow || ! $query->is_main_query() ) {
+            return;
+        }
+
+        $options = get_option( 'apg_settings', array() );
+        
+        if ( empty( $options['restrict_media_library'] ) ) {
+            return;
+        }
+
+        $user = wp_get_current_user();
+        
+        // Don't restrict administrators
+        if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+            return;
+        }
+
+        // Restrict to user's own uploads
+        $query->set( 'author', get_current_user_id() );
     }
 
     /**
