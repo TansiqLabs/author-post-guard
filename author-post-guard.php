@@ -130,6 +130,11 @@ final class Author_Post_Guard {
         // Media library restrictions
         add_filter( 'ajax_query_attachments_args', array( $this, 'restrict_media_library' ) );
         add_filter( 'pre_get_posts', array( $this, 'restrict_media_library_list' ) );
+        
+        // Reporter role restrictions
+        add_action( 'admin_menu', array( $this, 'restrict_reporter_menus' ), 999 );
+        add_filter( 'pre_get_posts', array( $this, 'restrict_reporter_posts' ) );
+        add_filter( 'map_meta_cap', array( $this, 'restrict_reporter_capabilities' ), 10, 4 );
     }
 
     /**
@@ -196,18 +201,19 @@ final class Author_Post_Guard {
      * @return void
      */
     public function register_reporter_role() {
-        // Check if role already exists
+        // Remove existing role to update capabilities
         if ( get_role( 'reporter' ) ) {
-            return;
+            remove_role( 'reporter' );
         }
 
         // Reporter capabilities:
         // - Can login and read
         // - Can create and publish own posts
-        // - Can edit and delete own posts
-        // - Can upload and manage own media files
-        // - Cannot edit others' posts
+        // - Can edit and delete own posts only
+        // - Can upload and manage own media files only
+        // - Cannot edit, view, or delete others' posts
         // - Cannot manage categories or tags
+        // - Cannot access comments, tools, or custom post types
         add_role(
             'reporter',
             __( 'Reporter', 'author-post-guard' ),
@@ -547,16 +553,23 @@ final class Author_Post_Guard {
             return;
         }
 
-        $options = get_option( 'apg_settings', array() );
-        
-        if ( empty( $options['restrict_media_library'] ) ) {
-            return;
-        }
-
         $user = wp_get_current_user();
         
         // Don't restrict administrators
         if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+            return;
+        }
+
+        // Always restrict Reporter role (regardless of settings)
+        if ( in_array( 'reporter', (array) $user->roles, true ) ) {
+            $query->set( 'author', get_current_user_id() );
+            return;
+        }
+
+        // Check settings for other roles
+        $options = get_option( 'apg_settings', array() );
+        
+        if ( empty( $options['restrict_media_library'] ) ) {
             return;
         }
 
@@ -678,6 +691,134 @@ final class Author_Post_Guard {
         $options = get_option( 'apg_settings', array() );
         $options[ $key ] = $value;
         return update_option( 'apg_settings', $options );
+    }
+
+    /**
+     * Restrict Reporter role menus
+     * Hide Comments, Tools, and other unnecessary menus
+     *
+     * @return void
+     */
+    public function restrict_reporter_menus() {
+        $user = wp_get_current_user();
+        
+        // Only restrict Reporter role
+        if ( ! in_array( 'reporter', (array) $user->roles, true ) ) {
+            return;
+        }
+
+        // Remove menus that Reporters should not access
+        remove_menu_page( 'edit-comments.php' );           // Comments
+        remove_menu_page( 'tools.php' );                    // Tools
+        remove_menu_page( 'themes.php' );                   // Appearance
+        remove_menu_page( 'plugins.php' );                  // Plugins
+        remove_menu_page( 'users.php' );                    // Users
+        remove_menu_page( 'options-general.php' );          // Settings
+        remove_menu_page( 'edit.php?post_type=page' );      // Pages
+        
+        // Remove Elementor templates and other custom post types
+        remove_menu_page( 'edit.php?post_type=elementor_library' );
+        remove_menu_page( 'edit.php?post_type=elementor_snippet' );
+        remove_menu_page( 'edit.php?post_type=e-landing-page' );
+        
+        // Remove other common custom post types
+        remove_menu_page( 'edit.php?post_type=acf-field-group' );
+        remove_menu_page( 'edit.php?post_type=wp_block' );
+    }
+
+    /**
+     * Restrict Reporter role to see only their own posts
+     *
+     * @param WP_Query $query WordPress query object
+     * @return void
+     */
+    public function restrict_reporter_posts( $query ) {
+        // Only in admin area
+        if ( ! is_admin() ) {
+            return;
+        }
+
+        $user = wp_get_current_user();
+        
+        // Only restrict Reporter role
+        if ( ! in_array( 'reporter', (array) $user->roles, true ) ) {
+            return;
+        }
+
+        // Only restrict post queries
+        if ( ! $query->is_main_query() ) {
+            return;
+        }
+
+        // Get current post type
+        $post_type = $query->get( 'post_type' );
+        
+        // If no post type specified, default to 'post'
+        if ( empty( $post_type ) ) {
+            $post_type = 'post';
+        }
+
+        // Only show own posts
+        global $current_user;
+        $query->set( 'author', $current_user->ID );
+    }
+
+    /**
+     * Restrict Reporter role capabilities
+     * Prevent editing, viewing, or deleting other users' posts
+     *
+     * @param array  $caps    Required capabilities
+     * @param string $cap     Capability being checked
+     * @param int    $user_id User ID
+     * @param array  $args    Additional arguments
+     * @return array Modified capabilities
+     */
+    public function restrict_reporter_capabilities( $caps, $cap, $user_id, $args ) {
+        $user = get_userdata( $user_id );
+        
+        // Only restrict Reporter role
+        if ( ! $user || ! in_array( 'reporter', (array) $user->roles, true ) ) {
+            return $caps;
+        }
+
+        // Capabilities to check
+        $restricted_caps = array(
+            'edit_post',
+            'delete_post',
+            'read_post',
+            'publish_post',
+        );
+
+        // If checking one of these capabilities
+        if ( in_array( $cap, $restricted_caps, true ) ) {
+            // Get post ID from args
+            if ( isset( $args[0] ) ) {
+                $post = get_post( $args[0] );
+                
+                // If post exists and author is not current user
+                if ( $post && (int) $post->post_author !== (int) $user_id ) {
+                    // Deny access
+                    $caps[] = 'do_not_allow';
+                }
+            }
+        }
+
+        // Prevent editing others' posts
+        if ( 'edit_others_posts' === $cap ) {
+            $caps[] = 'do_not_allow';
+        }
+
+        // Prevent deleting others' posts
+        if ( 'delete_others_posts' === $cap ) {
+            $caps[] = 'do_not_allow';
+        }
+
+        // Prevent reading private posts of others
+        if ( 'read_private_posts' === $cap ) {
+            $caps[] = 'do_not_allow';
+        }
+
+        return $caps;
     }
 }
 
