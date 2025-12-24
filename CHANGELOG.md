@@ -2,6 +2,13 @@
 
 All notable changes to Author Post Guard will be documented in this file.
 
+## [1.0.1] - 2025-12-24
+
+### Changed
+- **Contributing**: Added `CONTRIBUTING.md` with contribution workflow, PR guidelines, coding standards, and testing steps.
+
+---
+
 ## [1.0.0] - 2024-12-24
 
 ### Initial Production Release

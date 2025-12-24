@@ -3,7 +3,7 @@
  * Plugin Name: Author Post Guard
  * Plugin URI: https://github.com/TansiqLabs/author-post-guard
  * Description: A premium white-label solution for WordPress branding, custom Reporter role, and advanced notifications by Tansiq Labs.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Tansiq Labs
  * Author URI: https://tansiqlabs.com
  * License: MIT
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Constants
  */
-define( 'APG_VERSION', '1.0.0' );
+define( 'APG_VERSION', '1.0.1' );
 define( 'APG_PLUGIN_FILE', __FILE__ );
 define( 'APG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'APG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
