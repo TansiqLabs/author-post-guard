@@ -441,6 +441,43 @@ class APG_Settings {
                         </div>
                     </div>
                 </div>
+
+                <!-- Custom Logo Upload -->
+                <div class="apg-field">
+                    <div class="apg-field-row">
+                        <div class="apg-field-info">
+                            <label for="custom_logo_url"><?php esc_html_e( 'Custom Logo URL', 'author-post-guard' ); ?></label>
+                            <span class="apg-field-desc"><?php esc_html_e( 'Upload or enter a custom logo URL. Leave empty to use the default plugin logo.', 'author-post-guard' ); ?></span>
+                        </div>
+                        <div class="apg-field-input" style="flex: 1; max-width: 400px;">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="url" name="apg_settings[custom_logo_url]" id="custom_logo_url" 
+                                       value="<?php echo esc_attr( $options['custom_logo_url'] ?? '' ); ?>" 
+                                       class="apg-input" style="flex: 1;" placeholder="https://example.com/logo.svg">
+                                <button type="button" class="apg-btn apg-btn-outline apg-btn-sm apg-upload-logo">
+                                    <?php esc_html_e( 'Upload', 'author-post-guard' ); ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restrict Media Library -->
+                <div class="apg-field">
+                    <div class="apg-field-row">
+                        <div class="apg-field-info">
+                            <label for="restrict_media_library"><?php esc_html_e( 'Restrict Media Library', 'author-post-guard' ); ?></label>
+                            <span class="apg-field-desc"><?php esc_html_e( 'Non-admin users will only see their own uploaded files in the media library.', 'author-post-guard' ); ?></span>
+                        </div>
+                        <div class="apg-field-input">
+                            <label class="apg-toggle">
+                                <input type="checkbox" name="apg_settings[restrict_media_library]" id="restrict_media_library" value="1" 
+                                    <?php checked( ! empty( $options['restrict_media_library'] ) ); ?>>
+                                <span class="apg-toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
