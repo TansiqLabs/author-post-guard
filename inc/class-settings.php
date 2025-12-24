@@ -485,15 +485,24 @@ class APG_Settings {
         <div class="apg-card">
             <div class="apg-card-header">
                 <h2><?php esc_html_e( 'Logo Preview', 'author-post-guard' ); ?></h2>
-                <p><?php esc_html_e( 'Your current branding logo from assets/logo.svg', 'author-post-guard' ); ?></p>
+                <p><?php esc_html_e( 'Current logo being used for branding', 'author-post-guard' ); ?></p>
             </div>
             <div class="apg-card-body">
                 <div class="apg-logo-preview">
-                    <img src="<?php echo esc_url( APG_PLUGIN_URL . 'assets/logo.svg' ); ?>" alt="Logo Preview">
+                    <?php 
+                    $logo_url = ! empty( $options['custom_logo_url'] ) 
+                        ? $options['custom_logo_url'] 
+                        : APG_PLUGIN_URL . 'assets/logo.svg';
+                    ?>
+                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="Logo Preview" id="apg-logo-preview-img">
                 </div>
                 <p class="apg-field-desc" style="text-align: center; margin-top: 15px;">
-                    <?php esc_html_e( 'To change this logo, replace the file at:', 'author-post-guard' ); ?><br>
-                    <code><?php echo esc_html( APG_PLUGIN_DIR . 'assets/logo.svg' ); ?></code>
+                    <?php if ( ! empty( $options['custom_logo_url'] ) ) : ?>
+                        <?php esc_html_e( 'Using custom uploaded logo', 'author-post-guard' ); ?>
+                    <?php else : ?>
+                        <?php esc_html_e( 'Using default plugin logo from:', 'author-post-guard' ); ?><br>
+                        <code><?php echo esc_html( APG_PLUGIN_DIR . 'assets/logo.svg' ); ?></code>
+                    <?php endif; ?>
                 </p>
             </div>
         </div>
@@ -581,6 +590,23 @@ class APG_Settings {
             'tools.php'                 => __( 'Tools', 'author-post-guard' ),
             'options-general.php'       => __( 'Settings', 'author-post-guard' ),
             'profile.php'               => __( 'Profile', 'author-post-guard' ),
+            // Common plugin menus
+            'admin.php?page=wpcf7'      => __( 'Contact Form 7', 'author-post-guard' ),
+            'admin.php?page=elementor'  => __( 'Elementor', 'author-post-guard' ),
+            'admin.php?page=et_divi_options' => __( 'Divi', 'author-post-guard' ),
+            'admin.php?page=wpforms-overview' => __( 'WPForms', 'author-post-guard' ),
+            'admin.php?page=gf_edit_forms' => __( 'Gravity Forms', 'author-post-guard' ),
+            'admin.php?page=ninja-forms' => __( 'Ninja Forms', 'author-post-guard' ),
+            'admin.php?page=wpseo_dashboard' => __( 'Yoast SEO', 'author-post-guard' ),
+            'admin.php?page=rank-math' => __( 'Rank Math', 'author-post-guard' ),
+            'edit.php?post_type=snippets' => __( 'Code Snippets', 'author-post-guard' ),
+            'admin.php?page=litespeed' => __( 'LiteSpeed Cache', 'author-post-guard' ),
+            'admin.php?page=wprocket'  => __( 'WP Rocket', 'author-post-guard' ),
+            'admin.php?page=w3tc_dashboard' => __( 'W3 Total Cache', 'author-post-guard' ),
+            'admin.php?page=wp-super-cache' => __( 'WP Super Cache', 'author-post-guard' ),
+            'admin.php?page=wc-admin'  => __( 'WooCommerce', 'author-post-guard' ),
+            'edit.php?post_type=shop_order' => __( 'Orders (WooCommerce)', 'author-post-guard' ),
+            'edit.php?post_type=product' => __( 'Products (WooCommerce)', 'author-post-guard' ),
         );
     }
 
