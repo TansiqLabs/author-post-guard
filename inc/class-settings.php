@@ -64,6 +64,10 @@ class APG_Settings {
                 'label' => __( 'Menu Control', 'author-post-guard' ),
                 'icon'  => 'dashicons-menu',
             ),
+            'snippets'      => array(
+                'label' => __( 'Code Snippets', 'author-post-guard' ),
+                'icon'  => 'dashicons-editor-code',
+            ),
             'notifications' => array(
                 'label' => __( 'Notifications', 'author-post-guard' ),
                 'icon'  => 'dashicons-bell',
@@ -132,6 +136,8 @@ class APG_Settings {
         $sanitized['custom_footer_text']    = sanitize_text_field( $input['custom_footer_text'] ?? '' );
         $sanitized['login_logo_enabled']    = ! empty( $input['login_logo_enabled'] );
         $sanitized['adminbar_logo_enabled'] = ! empty( $input['adminbar_logo_enabled'] );
+        $sanitized['custom_logo_url']       = esc_url_raw( $input['custom_logo_url'] ?? '' );
+        $sanitized['restrict_media_library']= ! empty( $input['restrict_media_library'] );
 
         // Menu control
         if ( isset( $input['hidden_menus'] ) && is_array( $input['hidden_menus'] ) ) {
@@ -139,6 +145,11 @@ class APG_Settings {
         } else {
             $sanitized['hidden_menus'] = array();
         }
+
+        // Code Snippets
+        $sanitized['custom_css']            = isset( $input['custom_css'] ) ? wp_strip_all_tags( $input['custom_css'] ) : '';
+        $sanitized['custom_js']             = isset( $input['custom_js'] ) ? wp_strip_all_tags( $input['custom_js'] ) : '';
+        $sanitized['custom_php']            = isset( $input['custom_php'] ) ? $input['custom_php'] : ''; // Don't strip PHP
 
         // Notification settings
         $sanitized['discord_webhook']       = esc_url_raw( $input['discord_webhook'] ?? '' );
@@ -306,6 +317,9 @@ class APG_Settings {
                                 break;
                             case 'menu':
                                 $this->render_menu_tab( $options );
+                                break;
+                            case 'snippets':
+                                $this->render_snippets_tab( $options );
                                 break;
                             case 'notifications':
                                 $this->render_notifications_tab( $options );
