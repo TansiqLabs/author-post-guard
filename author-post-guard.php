@@ -253,7 +253,9 @@ final class Author_Post_Guard {
             return;
         }
 
-        $logo_url = APG_PLUGIN_URL . 'assets/logo.svg';
+        $logo_url = ! empty( $options['custom_logo_url'] ) 
+            ? $options['custom_logo_url'] 
+            : APG_PLUGIN_URL . 'assets/logo.svg';
         ?>
         <style type="text/css">
             #login h1 a, .login h1 a {
