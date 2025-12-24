@@ -1,6 +1,38 @@
 # Changelog
 
 All notable changes to Author Post Guard will be documented in this file.
+
+## [1.0.0] - 2024-12-24
+
+### Initial Production Release
+- **White-label Branding**: Complete WordPress branding customization
+  - Custom sidebar branding with logo and title
+  - Admin bar branding with logo support
+  - Custom login logo
+  - Footer text customization
+  - Dashboard welcome panel removal
+  - Custom admin colors
+- **Reporter Role**: Custom WordPress role with controlled permissions
+  - Can login and create own posts
+  - Can publish and edit own posts
+  - Can upload and manage own media files
+  - Cannot access other users' content
+  - Media library restrictions enforced
+- **Code Snippets**: Add custom CSS, JavaScript, and PHP code
+- **Notifications**: Real-time notifications for post status changes
+  - Post published notifications
+  - Post updated notifications
+  - Trash notifications
+  - Custom notification messages
+- **GitHub Updater**: Automatic plugin updates from GitHub repository
+- **Premium Features**:
+  - Clean, modern admin interface
+  - Tab-based settings organization
+  - Comprehensive security and access controls
+  - MIT License
+
+---
+
 ## [1.2.0] - 2024-12-24
 
 ### Added
