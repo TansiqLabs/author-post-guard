@@ -24,15 +24,24 @@
 
 ### 🎨 White Labeling & Branding
 - Replace WordPress footer text with your custom branding
+- Custom logo upload with media library integration
 - Custom logo on the login page
 - Replace WordPress logo in the admin bar
+- Media library restriction (users see only their uploads)
 - Complete brand consistency across the admin
 
 ### 📋 Menu Management
 - Hide specific menu items for different user roles
+- Support for popular plugins (Elementor, WPForms, Yoast SEO, LiteSpeed Cache, etc.)
 - Keep admin panel clean for editors/authors
 - Administrator menus remain unaffected
 - Toggle-based intuitive interface
+
+### 💻 Code Snippets
+- Custom CSS for admin area styling
+- Custom JavaScript for admin functionality
+- Custom PHP code execution (admin only)
+- Safe code editor with syntax highlighting support
 
 ### 🔔 Advanced Notification System
 - **Discord Integration**: Send notifications via Discord webhooks
@@ -162,7 +171,9 @@ The plugin follows WordPress coding standards and can be extended through standa
 
 ## 📄 License
 
-GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html) for details.
+MIT License - see [LICENSE](https://opensource.org/licenses/MIT) for details.
+
+This plugin is free to use, modify, and distribute.
 
 ## 🤝 Support
 
