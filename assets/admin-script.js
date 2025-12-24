@@ -186,6 +186,45 @@
         },
 
         /**
+         * Handle logo upload button click
+         * 
+         * @param {Event} e Click event
+         */
+        handleLogoUpload: function(e) {
+            e.preventDefault();
+            
+            // Use WordPress media uploader
+            if (typeof wp !== 'undefined' && wp.media) {
+                const mediaUploader = wp.media({
+                    title: 'Select Logo',
+                    button: {
+                        text: 'Use this logo'
+                    },
+                    multiple: false,
+                    library: {
+                        type: ['image']
+                    }
+                });
+                
+                mediaUploader.on('select', function() {
+                    const attachment = mediaUploader.state().get('selection').first().toJSON();
+                    $('#custom_logo_url').val(attachment.url);
+                    
+                    // Update preview
+                    if ($('#apg-logo-preview-img').length) {
+                        $('#apg-logo-preview-img').attr('src', attachment.url);
+                    }
+                    
+                    APGAdmin.showToast('Logo selected! Click Save Changes to apply.', 'success');
+                });
+                
+                mediaUploader.open();
+            } else {
+                APGAdmin.showToast('Media uploader not available', 'error');
+            }
+        },
+
+        /**
          * Show toast notification
          * 
          * @param {string} message Message to display
