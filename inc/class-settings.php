@@ -611,6 +611,75 @@ class APG_Settings {
     }
 
     /**
+     * Render Code Snippets tab content
+     *
+     * @param array $options Current settings
+     * @return void
+     */
+    private function render_snippets_tab( $options ) {
+        ?>
+        <div class="apg-card">
+            <div class="apg-card-header">
+                <h2><?php esc_html_e( 'Custom CSS', 'author-post-guard' ); ?></h2>
+                <p><?php esc_html_e( 'Add custom CSS that will be loaded in the WordPress admin area.', 'author-post-guard' ); ?></p>
+            </div>
+            <div class="apg-card-body">
+                <textarea name="apg_settings[custom_css]" id="custom_css" rows="12" class="apg-code-editor" placeholder="/* Add your custom CSS here */&#10;.my-custom-class {&#10;    color: #6366f1;&#10;}"><?php echo esc_textarea( $options['custom_css'] ?? '' ); ?></textarea>
+                <p class="apg-field-desc" style="margin-top: 10px;">
+                    <span class="dashicons dashicons-info-outline" style="color: var(--apg-info);"></span>
+                    <?php esc_html_e( 'This CSS will be applied to the admin area for all users.', 'author-post-guard' ); ?>
+                </p>
+            </div>
+        </div>
+
+        <div class="apg-card">
+            <div class="apg-card-header">
+                <h2><?php esc_html_e( 'Custom JavaScript', 'author-post-guard' ); ?></h2>
+                <p><?php esc_html_e( 'Add custom JavaScript that will be loaded in the WordPress admin area.', 'author-post-guard' ); ?></p>
+            </div>
+            <div class="apg-card-body">
+                <textarea name="apg_settings[custom_js]" id="custom_js" rows="12" class="apg-code-editor" placeholder="// Add your custom JavaScript here&#10;jQuery(document).ready(function($) {&#10;    console.log('Custom JS loaded');&#10;});"><?php echo esc_textarea( $options['custom_js'] ?? '' ); ?></textarea>
+                <p class="apg-field-desc" style="margin-top: 10px;">
+                    <span class="dashicons dashicons-info-outline" style="color: var(--apg-info);"></span>
+                    <?php esc_html_e( 'jQuery is available as $ inside jQuery(document).ready()', 'author-post-guard' ); ?>
+                </p>
+            </div>
+        </div>
+
+        <div class="apg-card">
+            <div class="apg-card-header">
+                <h2>
+                    <?php esc_html_e( 'Custom PHP Code', 'author-post-guard' ); ?>
+                    <span class="apg-badge apg-badge-warning" style="margin-left: 10px;"><?php esc_html_e( 'Advanced', 'author-post-guard' ); ?></span>
+                </h2>
+                <p><?php esc_html_e( 'Add custom PHP code that will be executed during WordPress initialization.', 'author-post-guard' ); ?></p>
+            </div>
+            <div class="apg-card-body">
+                <textarea name="apg_settings[custom_php]" id="custom_php" rows="12" class="apg-code-editor" placeholder="// Add your custom PHP code here (without &lt;?php tags)&#10;// Example:&#10;add_filter('the_content', function($content) {&#10;    return $content;&#10;});"><?php echo esc_textarea( $options['custom_php'] ?? '' ); ?></textarea>
+                <p class="apg-field-desc" style="margin-top: 10px;">
+                    <span class="dashicons dashicons-warning" style="color: var(--apg-error);"></span>
+                    <strong><?php esc_html_e( 'Warning:', 'author-post-guard' ); ?></strong>
+                    <?php esc_html_e( 'Invalid PHP code can break your site. Test thoroughly before saving.', 'author-post-guard' ); ?>
+                </p>
+            </div>
+        </div>
+
+        <div class="apg-info-card">
+            <span class="dashicons dashicons-info-outline"></span>
+            <div>
+                <strong><?php esc_html_e( 'Best Practices:', 'author-post-guard' ); ?></strong>
+                <ul style="margin: 8px 0 0 20px; line-height: 1.8;">
+                    <li><?php esc_html_e( 'Test your code in a staging environment first', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Keep snippets organized and well-commented', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Use WordPress hooks and filters properly', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Backup your site before adding complex PHP code', 'author-post-guard' ); ?></li>
+                </ul>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
      * Render Notifications tab content
      *
      * @param array $options Current settings
