@@ -1,0 +1,308 @@
+# WordPress Plugin Development - Author Post Guard
+# .gitignore v1.1.0
+
+# ===========================
+# WordPress Files
+# ===========================
+# Don't commit WordPress core files if plugin is in wp-content/plugins
+wp-admin/
+wp-includes/
+wp-content/*
+!wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/author-post-guard/
+
+# WordPress config
+wp-config.php
+wp-config-sample.php
+
+# ===========================
+# Plugin Development
+# ===========================
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Archive files (unless release)
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ===========================
+# Operating System Files
+# ===========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ===========================
+# IDE and Editor Files
+# ===========================
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# PhpStorm / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Atom
+.atom/
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+
+# Eclipse
+.project
+.settings/
+.classpath
+.buildpath
+
+# Vim
+*.swp
+*.swo
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+Session.vim
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+
+# ===========================
+# Development Tools
+# ===========================
+# Node.js (if used for build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Composer (if used for dependencies)
+vendor/
+composer.lock
+
+# Grunt
+.grunt/
+
+# Gulp
+.gulp/
+
+# Webpack
+webpack.lock
+
+# ===========================
+# Testing & Quality Tools
+# ===========================
+# PHPUnit
+phpunit.xml
+/tests/_output/
+/.phpunit.cache/
+
+# PHP_CodeSniffer
+phpcs.xml
+
+# Psalm
+psalm.xml
+.psalm/
+
+# PHPStan
+phpstan.neon
+
+# Coverage reports
+coverage/
+*.coverage
+
+# ===========================
+# Logs & Databases
+# ===========================
+# Log files
+*.log
+error_log
+debug.log
+
+# Database files
+*.sql
+*.sqlite
+*.db
+
+# ===========================
+# Environment & Config
+# ===========================
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Local configuration
+local-config.php
+config-local.php
+
+# ===========================
+# Build & Distribution
+# ===========================
+# Build directories
+/build/
+/dist/
+/release/
+
+# Compiled assets (if using build tools)
+/assets/dist/
+/assets/build/
+
+# Minified files (if auto-generated)
+*.min.js.map
+*.min.css.map
+
+# ===========================
+# Security & Sensitive Data
+# ===========================
+# Private keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Certificates
+*.crt
+*.cer
+
+# Passwords / secrets
+secrets.json
+credentials.json
+
+# ===========================
+# Cache & Temporary
+# ===========================
+# WordPress cache
+wp-content/cache/
+wp-content/backup-db/
+wp-content/backups/
+wp-content/upgrade/
+
+# Plugin-specific cache
+/cache/
+/tmp/
+
+# ===========================
+# Documentation (Keep Generated)
+# ===========================
+# Keep all .md files (documentation is important)
+# !*.md
+
+# API documentation (if auto-generated)
+/docs/api/
+/phpdoc/
+
+# ===========================
+# Version Control
+# ===========================
+# Git
+.git/
+.gitattributes
+
+# SVN (if migrating from WordPress.org SVN)
+.svn/
+
+# Mercurial
+.hg/
+
+# ===========================
+# Miscellaneous
+# ===========================
+# Sass cache
+.sass-cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Parcel cache
+.cache/
+
+# Next.js
+.next/
+
+# Nuxt.js
+.nuxt/
+
+# ===========================
+# Project Specific
+# ===========================
+# Development testing files
+test-*.php
+dev-*.php
+debug-*.php
+
+# Local screenshots/demos
+screenshots-local/
+demos/
+
+# Local development database exports
+db-backup-*.sql
+
+# WordPress debug log
+wp-content/debug.log
+
+# ===========================
+# Keep These Files (Exceptions)
+# ===========================
+# Always include
+!.gitignore
+!README.md
+!LICENSE
+!CHANGELOG.md
+
+# Include all documentation
+!*.md
+
+# Include verification script
+!verify.sh
+
+# ===========================
+# Notes
+# ===========================
+# This .gitignore is configured for:
+# - WordPress plugin development
+# - Modern development tools
+# - Multiple IDEs and editors
+# - Security best practices
+# 
+# Customize as needed for your workflow
