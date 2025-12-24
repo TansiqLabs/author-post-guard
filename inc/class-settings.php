@@ -60,9 +60,9 @@ class APG_Settings {
                 'label' => __( 'General Branding', 'author-post-guard' ),
                 'icon'  => 'dashicons-art',
             ),
-            'menu'          => array(
-                'label' => __( 'Menu Control', 'author-post-guard' ),
-                'icon'  => 'dashicons-menu',
+            'reporter'      => array(
+                'label' => __( 'Reporter Role', 'author-post-guard' ),
+                'icon'  => 'dashicons-id',
             ),
             'snippets'      => array(
                 'label' => __( 'Code Snippets', 'author-post-guard' ),
@@ -321,8 +321,8 @@ class APG_Settings {
                             case 'branding':
                                 $this->render_branding_tab( $options );
                                 break;
-                            case 'menu':
-                                $this->render_menu_tab( $options );
+                            case 'reporter':
+                                $this->render_reporter_tab( $options );
                                 break;
                             case 'snippets':
                                 $this->render_snippets_tab( $options );
@@ -516,7 +516,157 @@ class APG_Settings {
     }
 
     /**
-     * Render Menu Control tab content
+     * Render Reporter Role tab content
+     *
+     * @param array $options Current settings
+     * @return void
+     */
+    private function render_reporter_tab( $options ) {
+        $reporter_enabled = isset( $options['reporter_role_enabled'] ) ? $options['reporter_role_enabled'] : false;
+        $reporter_role = get_role( 'reporter' );
+        ?>
+        <div class="apg-card">
+            <div class="apg-card-header">
+                <h2><?php esc_html_e( 'Reporter Role Management', 'author-post-guard' ); ?></h2>
+                <p><?php esc_html_e( 'Enable and manage the custom Reporter role for your WordPress site.', 'author-post-guard' ); ?></p>
+            </div>
+            <div class="apg-card-body">
+                <!-- Enable Reporter Role Toggle -->
+                <div class="apg-field-group">
+                    <div class="apg-field-row">
+                        <div class="apg-field-label">
+                            <label for="reporter_role_enabled">
+                                <strong><?php esc_html_e( 'Enable Reporter Role', 'author-post-guard' ); ?></strong>
+                                <p class="apg-field-desc"><?php esc_html_e( 'Allow creating users with the Reporter role.', 'author-post-guard' ); ?></p>
+                            </label>
+                        </div>
+                        <div class="apg-field-control">
+                            <label class="apg-toggle">
+                                <input type="checkbox" name="apg_settings[reporter_role_enabled]" id="reporter_role_enabled" value="1" <?php checked( $reporter_enabled ); ?>>
+                                <span class="apg-toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reporter Role Status -->
+                <div class="apg-field-group" style="margin-top: 30px;">
+                    <div class="apg-status-card <?php echo $reporter_role ? 'apg-status-active' : 'apg-status-inactive'; ?>">
+                        <span class="dashicons <?php echo $reporter_role ? 'dashicons-yes-alt' : 'dashicons-dismiss'; ?>"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Role Status:', 'author-post-guard' ); ?></strong>
+                            <span><?php echo $reporter_role ? esc_html__( 'Reporter role is registered', 'author-post-guard' ) : esc_html__( 'Reporter role not found', 'author-post-guard' ); ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporter Capabilities Card -->
+        <div class="apg-card">
+            <div class="apg-card-header">
+                <h2><?php esc_html_e( 'Reporter Capabilities', 'author-post-guard' ); ?></h2>
+                <p><?php esc_html_e( 'Users with the Reporter role have the following permissions:', 'author-post-guard' ); ?></p>
+            </div>
+            <div class="apg-card-body">
+                <div class="apg-capabilities-grid">
+                    <div class="apg-capability-item">
+                        <span class="dashicons dashicons-yes"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Login Access', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Can login to WordPress admin area', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item">
+                        <span class="dashicons dashicons-yes"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Create Posts', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Can create and publish own posts', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item">
+                        <span class="dashicons dashicons-yes"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Edit Own Posts', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Can edit and delete own published posts', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item">
+                        <span class="dashicons dashicons-yes"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Upload Media', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Can upload and manage own media files', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item apg-capability-restricted">
+                        <span class="dashicons dashicons-no"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Edit Others\' Posts', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Cannot edit or view others\' posts', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item apg-capability-restricted">
+                        <span class="dashicons dashicons-no"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Manage Categories', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Cannot create or manage categories/tags', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item apg-capability-restricted">
+                        <span class="dashicons dashicons-no"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'View Others\' Media', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Can only see own uploaded media', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="apg-capability-item apg-capability-restricted">
+                        <span class="dashicons dashicons-no"></span>
+                        <div>
+                            <strong><?php esc_html_e( 'Plugin/Theme Access', 'author-post-guard' ); ?></strong>
+                            <p><?php esc_html_e( 'Cannot access plugins, themes, or settings', 'author-post-guard' ); ?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="apg-info-card">
+            <span class="dashicons dashicons-info-outline"></span>
+            <div>
+                <strong><?php esc_html_e( 'How to Use Reporter Role:', 'author-post-guard' ); ?></strong>
+                <ol style="margin: 8px 0 0 20px; line-height: 1.8;">
+                    <li><?php esc_html_e( 'Enable the Reporter role using the toggle above', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Go to Users → Add New in WordPress admin', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Fill in user details and select "Reporter" as the role', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'The user can now login and create their own posts', 'author-post-guard' ); ?></li>
+                    <li><?php esc_html_e( 'Media library restrictions will automatically apply if enabled in Branding tab', 'author-post-guard' ); ?></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Warning Card -->
+        <?php if ( ! $reporter_role ) : ?>
+        <div class="apg-info-card" style="border-left-color: var(--apg-error); background: rgba(239, 68, 68, 0.1);">
+            <span class="dashicons dashicons-warning" style="color: var(--apg-error);"></span>
+            <div>
+                <strong style="color: var(--apg-error);"><?php esc_html_e( 'Reporter Role Not Found', 'author-post-guard' ); ?></strong>
+                <p><?php esc_html_e( 'The Reporter role has not been registered. Please deactivate and reactivate the plugin to register the role.', 'author-post-guard' ); ?></p>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php
+    }
+
+    /**
+     * Render Menu Control tab content (DEPRECATED - Keeping for reference)
      *
      * @param array $options Current settings
      * @return void

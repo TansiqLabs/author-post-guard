@@ -1,7 +1,30 @@
 # Changelog
 
 All notable changes to Author Post Guard will be documented in this file.
+## [1.2.0] - 2024-12-24
 
+### Added
+- **Reporter Role**: New custom WordPress role with limited permissions
+  - Can login and create own posts
+  - Can publish and edit own posts
+  - Can upload and manage own media files
+  - Cannot access other users' content
+  - Cannot manage categories, tags, or site settings
+- Reporter Role management tab in settings
+- Visual capability indicators showing what Reporters can and cannot do
+- Enable/disable toggle for Reporter role
+- Automatic media library restrictions for Reporter users
+
+### Removed
+- Menu Control tab (deprecated - not useful for the workflow)
+- All menu visibility control functions
+- Direct URL blocking functions (no longer needed)
+- Hidden menus configuration options
+
+### Changed
+- Simplified plugin focus to branding and role management
+- Updated tab navigation (now 5 tabs: Branding, Reporter Role, Snippets, Notifications, Updates)
+- Improved settings page organization
 ## [1.1.0] - 2025-12-24
 
 ### Added

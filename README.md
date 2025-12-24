@@ -18,9 +18,9 @@
 
 ## 🎯 Overview
 
-**Author Post Guard** is a premium WordPress plugin designed for agencies, developers, and businesses who need complete control over their WordPress admin experience. It provides white-labeling capabilities, advanced menu management, webhook notifications, and automatic updates from GitHub.
+**Author Post Guard** is a premium WordPress plugin designed for agencies, developers, and businesses who need complete control over their WordPress admin experience. It provides white-labeling capabilities, custom Reporter role for content creators, webhook notifications, and automatic updates from GitHub.
 
-**Version 1.1.0** introduces comprehensive security features including admin-only access controls, direct URL blocking for hidden menus, and protected plugin pages for backup and security tools.
+**Version 1.2.0** introduces a custom Reporter role that allows restricted users to create and manage only their own posts and media files, perfect for content teams and multi-author blogs.
 
 ## ✨ Features
 
@@ -32,30 +32,14 @@
 - Media library restriction (users see only their uploads)
 - Complete brand consistency across the admin
 
-### 🔒 Security & Access Control
-- **Admin-Only Plugin Access**: Only administrators can access plugin settings
-- **Direct URL Blocking**: Hidden menus blocked even with direct URL access
-- **Protected Plugin Pages**: Backup plugins (UpdraftPlus, BackWPup, Duplicator) always admin-only
-- **Cache Plugin Protection**: LiteSpeed, WP Rocket, W3 Total Cache restricted to admins
-- **Security Plugin Protection**: Wordfence, Sucuri, iThemes Security admin-only
-- **File Manager Protection**: WP File Manager, Adminer, phpMyAdmin restricted
-- Comprehensive capability checks throughout
-
-### 📋 Menu Management (40+ Plugins Supported)
-- Hide specific menu items for different user roles
-- **Form Plugins**: Contact Form 7, Ninja Forms, WPForms, Gravity Forms, Formidable Forms
-- **Page Builders**: Elementor, Divi, Beaver Builder, WPBakery, Oxygen, Bricks
-- **SEO Tools**: Yoast SEO, Rank Math, All in One SEO
-- **E-Commerce**: WooCommerce, Easy Digital Downloads, WP eCommerce
-- **Backup Tools**: UpdraftPlus, BackWPup, Duplicator, All-in-One WP Migration
-- **Cache Plugins**: LiteSpeed Cache, WP Rocket, W3 Total Cache, WP Super Cache
-- **Security**: Wordfence, Sucuri, iThemes Security, Solid Security
-- **Analytics**: MonsterInsights, Google Analytics, Matomo
-- **File Managers**: WP File Manager, File Manager, Simple File Manager
-- **Custom Fields**: Advanced Custom Fields, Pods, Toolset, Meta Box
-- **And many more...**
-- Administrator menus remain unaffected
-- Toggle-based intuitive interface
+### 👤 Reporter Role Management
+- **Custom Reporter Role**: Perfect for content creators and journalists
+- **Post Management**: Can create, edit, and publish own posts
+- **Media Management**: Upload and manage own media files only
+- **Restricted Access**: Cannot view or edit others' content
+- **No Site Settings**: Cannot access categories, tags, plugins, or themes
+- **Easy Management**: Enable/disable role from settings page
+- **Auto-Applied Restrictions**: Media library automatically filters to own uploads
 
 ### 💻 Code Snippets
 - Custom CSS for admin area styling

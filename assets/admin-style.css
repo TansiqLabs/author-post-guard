@@ -1041,3 +1041,101 @@ code {
         border: 1px solid #ddd;
     }
 }
+
+/* ==========================================================================
+   Reporter Role Tab Styles
+   ========================================================================== */
+
+.apg-capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--apg-spacing-md);
+    margin-top: var(--apg-spacing-md);
+}
+
+.apg-capability-item {
+    display: flex;
+    gap: var(--apg-spacing-sm);
+    padding: var(--apg-spacing-md);
+    background: var(--apg-success-bg);
+    border-left: 3px solid var(--apg-success);
+    border-radius: var(--apg-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.apg-capability-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+.apg-capability-item .dashicons {
+    color: var(--apg-success);
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.apg-capability-item strong {
+    display: block;
+    color: var(--apg-gray-900);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.apg-capability-item p {
+    color: var(--apg-gray-600);
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.apg-capability-restricted {
+    background: var(--apg-error-bg);
+    border-left-color: var(--apg-error);
+}
+
+.apg-capability-restricted .dashicons {
+    color: var(--apg-error);
+}
+
+.apg-capability-restricted:hover {
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+}
+
+.apg-status-card {
+    display: flex;
+    align-items: center;
+    gap: var(--apg-spacing-sm);
+    padding: var(--apg-spacing-md);
+    border-radius: var(--apg-radius-md);
+    font-size: 14px;
+}
+
+.apg-status-active {
+    background: var(--apg-success-bg);
+    border-left: 3px solid var(--apg-success);
+}
+
+.apg-status-active .dashicons {
+    color: var(--apg-success);
+    font-size: 24px;
+}
+
+.apg-status-inactive {
+    background: var(--apg-gray-100);
+    border-left: 3px solid var(--apg-gray-400);
+}
+
+.apg-status-inactive .dashicons {
+    color: var(--apg-gray-400);
+    font-size: 24px;
+}
+
+.apg-status-card strong {
+    color: var(--apg-gray-900);
+    margin-right: 8px;
+}
+
+.apg-status-card span {
+    color: var(--apg-gray-600);
+}

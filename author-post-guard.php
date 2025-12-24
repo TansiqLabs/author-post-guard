@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Author Post Guard
  * Plugin URI: https://github.com/TansiqLabs/author-post-guard
- * Description: A premium white-label solution for WordPress branding, menu control, and advanced notifications by Tansiq Labs.
- * Version: 1.1.0
+ * Description: A premium white-label solution for WordPress branding, custom Reporter role, and advanced notifications by Tansiq Labs.
+ * Version: 1.2.0
  * Author: Tansiq Labs
  * Author URI: https://tansiqlabs.com
  * License: MIT
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Constants
  */
-define( 'APG_VERSION', '1.1.0' );
+define( 'APG_VERSION', '1.2.0' );
 define( 'APG_PLUGIN_FILE', __FILE__ );
 define( 'APG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'APG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -127,11 +127,6 @@ final class Author_Post_Guard {
         add_filter( 'update_footer', array( $this, 'custom_update_footer' ), 99 );
         add_action( 'admin_bar_menu', array( $this, 'customize_admin_bar_logo' ), 11 );
 
-        // Menu control hooks
-        add_action( 'admin_menu', array( $this, 'control_admin_menu' ), 999 );
-        add_action( 'admin_init', array( $this, 'control_admin_submenus' ), 999 );
-        add_action( 'admin_init', array( $this, 'block_direct_access' ), 1 );
-
         // Media library restrictions
         add_filter( 'ajax_query_attachments_args', array( $this, 'restrict_media_library' ) );
         add_filter( 'pre_get_posts', array( $this, 'restrict_media_library_list' ) );
@@ -158,6 +153,9 @@ final class Author_Post_Guard {
      * @return void
      */
     public function activate() {
+        // Register Reporter role
+        $this->register_reporter_role();
+
         // Set default options on first activation
         $defaults = array(
             'branding_enabled'      => true,
@@ -166,7 +164,7 @@ final class Author_Post_Guard {
             'adminbar_logo_enabled' => true,
             'custom_logo_url'       => '',
             'restrict_media_library'=> false,
-            'hidden_menus'          => array(),
+            'reporter_role_enabled' => false,
             'custom_css'            => '',
             'custom_js'             => '',
             'custom_php'            => '',
@@ -193,11 +191,49 @@ final class Author_Post_Guard {
     }
 
     /**
+     * Register Reporter custom role
+     *
+     * @return void
+     */
+    public function register_reporter_role() {
+        // Check if role already exists
+        if ( get_role( 'reporter' ) ) {
+            return;
+        }
+
+        // Reporter capabilities:
+        // - Can login and read
+        // - Can create and publish own posts
+        // - Can edit and delete own posts
+        // - Can upload and manage own media files
+        // - Cannot edit others' posts
+        // - Cannot manage categories or tags
+        add_role(
+            'reporter',
+            __( 'Reporter', 'author-post-guard' ),
+            array(
+                'read'                   => true,
+                'edit_posts'             => true,
+                'publish_posts'          => true,
+                'edit_published_posts'   => true,
+                'delete_posts'           => true,
+                'delete_published_posts' => true,
+                'upload_files'           => true,
+            )
+        );
+    }
+
+    /**
      * Plugin deactivation routine
      *
      * @return void
      */
     public function deactivate() {
+        // Remove Reporter role only if it exists
+        if ( get_role( 'reporter' ) ) {
+            remove_role( 'reporter' );
+        }
+
         // Clean up scheduled events if any
         wp_clear_scheduled_hook( 'apg_daily_cleanup' );
         flush_rewrite_rules();
