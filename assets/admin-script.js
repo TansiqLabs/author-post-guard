@@ -37,6 +37,9 @@
             // Check for updates button
             $('#apg-check-updates').on('click', this.handleCheckUpdates.bind(this));
             
+            // Logo upload button
+            $('.apg-upload-logo').on('click', this.handleLogoUpload.bind(this));
+            
             // Toggle password visibility for tokens
             $('[type="password"]').on('dblclick', function() {
                 const type = $(this).attr('type') === 'password' ? 'text' : 'password';
