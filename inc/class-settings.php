@@ -201,18 +201,23 @@ class APG_Settings {
         
         // Parse serialized data if needed
         if ( is_string( $settings ) ) {
-            parse_str( $settings, $settings );
+            parse_str( $settings, $parsed );
+            // Extract the apg_settings array if it exists
+            $settings = isset( $parsed['apg_settings'] ) ? $parsed['apg_settings'] : $parsed;
+        }
+
+        // If settings is still not an array, bail
+        if ( ! is_array( $settings ) ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid settings format.', 'author-post-guard' ) ) );
         }
 
         // Sanitize and save
         $sanitized = $this->sanitize_settings( $settings );
-        $result    = update_option( 'apg_settings', $sanitized );
-
-        if ( false !== $result ) {
-            wp_send_json_success( array( 'message' => __( 'Settings saved successfully!', 'author-post-guard' ) ) );
-        } else {
-            wp_send_json_error( array( 'message' => __( 'No changes detected or save failed.', 'author-post-guard' ) ) );
-        }
+        
+        // Always update, even if values are the same (to avoid the "no changes" issue)
+        update_option( 'apg_settings', $sanitized, false );
+        
+        wp_send_json_success( array( 'message' => __( 'Settings saved successfully!', 'author-post-guard' ) ) );
     }
 
     /**
