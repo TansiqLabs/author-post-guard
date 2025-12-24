@@ -343,6 +343,36 @@
 }
 
 /* ==========================================================================
+   Code Editor
+   ========================================================================== */
+
+.apg-code-editor {
+    width: 100%;
+    padding: 12px;
+    font-family: var(--apg-font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--apg-gray-800);
+    background: var(--apg-gray-50);
+    border: 1px solid var(--apg-gray-300);
+    border-radius: var(--apg-radius-md);
+    resize: vertical;
+    transition: all var(--apg-transition-fast);
+}
+
+.apg-code-editor:focus {
+    outline: none;
+    border-color: var(--apg-primary);
+    box-shadow: 0 0 0 3px var(--apg-primary-bg);
+    background: white;
+}
+
+.apg-code-editor::placeholder {
+    color: var(--apg-gray-400);
+    font-style: italic;
+}
+
+/* ==========================================================================
    Toggle Switch
    ========================================================================== */
 
