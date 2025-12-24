@@ -431,6 +431,65 @@ final class Author_Post_Guard {
     }
 
     /**
+     * Output custom CSS in admin head
+     *
+     * @return void
+     */
+    public function output_custom_css() {
+        $options = get_option( 'apg_settings', array() );
+        $custom_css = isset( $options['custom_css'] ) ? trim( $options['custom_css'] ) : '';
+        
+        if ( ! empty( $custom_css ) ) {
+            echo "\n<!-- Author Post Guard Custom CSS -->\n<style type=\"text/css\">\n";
+            echo wp_strip_all_tags( $custom_css );
+            echo "\n</style>\n";
+        }
+    }
+
+    /**
+     * Output custom JavaScript in admin footer
+     *
+     * @return void
+     */
+    public function output_custom_js() {
+        $options = get_option( 'apg_settings', array() );
+        $custom_js = isset( $options['custom_js'] ) ? trim( $options['custom_js'] ) : '';
+        
+        if ( ! empty( $custom_js ) ) {
+            echo "\n<!-- Author Post Guard Custom JavaScript -->\n<script type=\"text/javascript\">\n";
+            echo wp_strip_all_tags( $custom_js );
+            echo "\n</script>\n";
+        }
+    }
+
+    /**
+     * Execute custom PHP code
+     *
+     * @return void
+     */
+    public function execute_custom_php() {
+        // Only administrators can execute custom PHP
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        
+        $options = get_option( 'apg_settings', array() );
+        $custom_php = isset( $options['custom_php'] ) ? trim( $options['custom_php'] ) : '';
+        
+        if ( ! empty( $custom_php ) ) {
+            try {
+                // Execute the PHP code
+                eval( $custom_php );
+            } catch ( Exception $e ) {
+                // Log error if PHP code fails
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( '[Author Post Guard] Custom PHP Error: ' . $e->getMessage() );
+                }
+            }
+        }
+    }
+
+    /**
      * Control submenu visibility
      *
      * @return void

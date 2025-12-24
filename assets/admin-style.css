@@ -147,6 +147,15 @@
     gap: var(--apg-spacing-sm);
 }
 
+.apg-header-actions .apg-btn {
+    color: white;
+}
+
+.apg-header-actions .apg-btn:hover {
+    color: white;
+    opacity: 0.9;
+}
+
 /* ==========================================================================
    Tabs Navigation
    ========================================================================== */
