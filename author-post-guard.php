@@ -158,9 +158,6 @@ final class Author_Post_Guard {
      * @return void
      */
     public function activate() {
-        // Register Reporter role
-        $this->register_reporter_role();
-
         // Set default options on first activation
         $defaults = array(
             'branding_enabled'      => true,
@@ -521,16 +518,23 @@ final class Author_Post_Guard {
      * @return array Modified query
      */
     public function restrict_media_library( $query ) {
-        $options = get_option( 'apg_settings', array() );
-        
-        if ( empty( $options['restrict_media_library'] ) ) {
-            return $query;
-        }
-
         $user = wp_get_current_user();
         
         // Don't restrict administrators
         if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+            return $query;
+        }
+
+        // Always restrict Reporter role (regardless of settings)
+        if ( in_array( 'reporter', (array) $user->roles, true ) ) {
+            $query['author'] = get_current_user_id();
+            return $query;
+        }
+
+        // Check settings for other roles
+        $options = get_option( 'apg_settings', array() );
+        
+        if ( empty( $options['restrict_media_library'] ) ) {
             return $query;
         }
 

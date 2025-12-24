@@ -140,6 +140,9 @@ class APG_Settings {
         $sanitized['custom_logo_url']       = esc_url_raw( $input['custom_logo_url'] ?? '' );
         $sanitized['restrict_media_library']= ! empty( $input['restrict_media_library'] );
 
+        // Reporter Role
+        $sanitized['reporter_role_enabled'] = ! empty( $input['reporter_role_enabled'] );
+
         // Menu control
         if ( isset( $input['hidden_menus'] ) && is_array( $input['hidden_menus'] ) ) {
             $sanitized['hidden_menus'] = $this->sanitize_hidden_menus( $input['hidden_menus'] );
@@ -225,6 +228,26 @@ class APG_Settings {
 
         // Sanitize and save
         $sanitized = $this->sanitize_settings( $settings );
+        
+        // Handle Reporter Role enable/disable
+        $old_options = get_option( 'apg_settings', array() );
+        $old_reporter_enabled = isset( $old_options['reporter_role_enabled'] ) ? $old_options['reporter_role_enabled'] : false;
+        $new_reporter_enabled = isset( $sanitized['reporter_role_enabled'] ) ? $sanitized['reporter_role_enabled'] : false;
+        
+        // If Reporter role setting changed
+        if ( $old_reporter_enabled !== $new_reporter_enabled ) {
+            $plugin = Author_Post_Guard::get_instance();
+            
+            if ( $new_reporter_enabled ) {
+                // Enable Reporter role
+                $plugin->register_reporter_role();
+            } else {
+                // Disable Reporter role - remove it
+                if ( get_role( 'reporter' ) ) {
+                    remove_role( 'reporter' );
+                }
+            }
+        }
         
         // Always update, even if values are the same (to avoid the "no changes" issue)
         update_option( 'apg_settings', $sanitized, false );
