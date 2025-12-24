@@ -213,6 +213,9 @@ final class Author_Post_Guard {
 
         // Load full assets only on our settings page
         if ( 'toplevel_page_author-post-guard' === $hook ) {
+            // Enqueue WordPress media uploader
+            wp_enqueue_media();
+            
             wp_enqueue_style(
                 'apg-admin-style',
                 APG_PLUGIN_URL . 'assets/admin-style.css',
@@ -223,7 +226,7 @@ final class Author_Post_Guard {
             wp_enqueue_script(
                 'apg-admin-script',
                 APG_PLUGIN_URL . 'assets/admin-script.js',
-                array( 'jquery' ),
+                array( 'jquery', 'media-upload', 'media-views' ),
                 APG_VERSION,
                 true
             );
