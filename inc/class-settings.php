@@ -877,12 +877,12 @@ class APG_Settings {
                     <div class="apg-field-row">
                         <div class="apg-field-info">
                             <label for="github_repo"><?php esc_html_e( 'GitHub Repository', 'author-post-guard' ); ?></label>
-                            <span class="apg-field-desc"><?php esc_html_e( 'Format: owner/repository (e.g., TansiqLabs/author-post-guard)', 'author-post-guard' ); ?></span>
+                            <span class="apg-field-desc"><?php esc_html_e( 'Format: owner/repository (default repository, cannot be changed)', 'author-post-guard' ); ?></span>
                         </div>
                         <div class="apg-field-input">
                             <input type="text" name="apg_settings[github_repo]" id="github_repo" 
                                    value="<?php echo esc_attr( $options['github_repo'] ?? 'TansiqLabs/author-post-guard' ); ?>" 
-                                   class="apg-input" placeholder="TansiqLabs/author-post-guard">
+                                   class="apg-input" placeholder="TansiqLabs/author-post-guard" readonly style="background: var(--apg-gray-100); cursor: not-allowed;">
                         </div>
                     </div>
                 </div>

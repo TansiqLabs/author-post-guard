@@ -116,6 +116,11 @@ final class Author_Post_Guard {
         // Admin assets
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
+        // Execute custom snippets
+        add_action( 'admin_head', array( $this, 'output_custom_css' ) );
+        add_action( 'admin_footer', array( $this, 'output_custom_js' ) );
+        add_action( 'init', array( $this, 'execute_custom_php' ) );
+
         // White-label branding hooks
         add_action( 'login_enqueue_scripts', array( $this, 'login_page_branding' ) );
         add_filter( 'admin_footer_text', array( $this, 'custom_admin_footer' ) );
