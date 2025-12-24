@@ -91,18 +91,19 @@ class APG_Settings {
             'manage_options',
             'author-post-guard',
             array( $this, 'render_settings_page' ),
-            'data:image/svg+xml;base64,' . base64_encode( $this->get_menu_icon_svg() ),
+            $this->get_menu_icon_svg(),
             30
         );
     }
 
     /**
-     * Get SVG icon for admin menu
+     * Get menu icon for admin sidebar
      *
-     * @return string SVG markup
+     * @return string Icon identifier
      */
     private function get_menu_icon_svg() {
-        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>';
+        // Using dashicon for better WordPress integration
+        return 'dashicons-shield-alt';
     }
 
     /**
@@ -265,6 +266,11 @@ class APG_Settings {
      * @return void
      */
     public function render_settings_page() {
+        // Security check - only administrators can access
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'author-post-guard' ) );
+        }
+        
         // Get current tab
         $this->current_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'branding';
         
@@ -579,6 +585,7 @@ class APG_Settings {
      */
     private function get_available_menu_items() {
         return array(
+            // Core WordPress Menus
             'index.php'                 => __( 'Dashboard', 'author-post-guard' ),
             'edit.php'                  => __( 'Posts', 'author-post-guard' ),
             'upload.php'                => __( 'Media', 'author-post-guard' ),
@@ -590,23 +597,52 @@ class APG_Settings {
             'tools.php'                 => __( 'Tools', 'author-post-guard' ),
             'options-general.php'       => __( 'Settings', 'author-post-guard' ),
             'profile.php'               => __( 'Profile', 'author-post-guard' ),
-            // Common plugin menus
+            
+            // Form Builders
             'admin.php?page=wpcf7'      => __( 'Contact Form 7', 'author-post-guard' ),
-            'admin.php?page=elementor'  => __( 'Elementor', 'author-post-guard' ),
-            'admin.php?page=et_divi_options' => __( 'Divi', 'author-post-guard' ),
             'admin.php?page=wpforms-overview' => __( 'WPForms', 'author-post-guard' ),
             'admin.php?page=gf_edit_forms' => __( 'Gravity Forms', 'author-post-guard' ),
             'admin.php?page=ninja-forms' => __( 'Ninja Forms', 'author-post-guard' ),
+            'admin.php?page=formidable' => __( 'Formidable Forms', 'author-post-guard' ),
+            
+            // Page Builders
+            'admin.php?page=elementor'  => __( 'Elementor', 'author-post-guard' ),
+            'admin.php?page=et_divi_options' => __( 'Divi', 'author-post-guard' ),
+            'admin.php?page=vc-general-settings' => __( 'WPBakery', 'author-post-guard' ),
+            
+            // SEO Plugins
             'admin.php?page=wpseo_dashboard' => __( 'Yoast SEO', 'author-post-guard' ),
             'admin.php?page=rank-math' => __( 'Rank Math', 'author-post-guard' ),
-            'edit.php?post_type=snippets' => __( 'Code Snippets', 'author-post-guard' ),
+            'admin.php?page=aioseo' => __( 'All in One SEO', 'author-post-guard' ),
+            
+            // Backup Plugins
+            'admin.php?page=updraftplus' => __( 'UpdraftPlus', 'author-post-guard' ),
+            'admin.php?page=backwpup' => __( 'BackWPup', 'author-post-guard' ),
+            'admin.php?page=duplicator' => __( 'Duplicator', 'author-post-guard' ),
+            
+            // Cache & Performance
             'admin.php?page=litespeed' => __( 'LiteSpeed Cache', 'author-post-guard' ),
             'admin.php?page=wprocket'  => __( 'WP Rocket', 'author-post-guard' ),
             'admin.php?page=w3tc_dashboard' => __( 'W3 Total Cache', 'author-post-guard' ),
-            'admin.php?page=wp-super-cache' => __( 'WP Super Cache', 'author-post-guard' ),
+            'admin.php?page=wpsupercache' => __( 'WP Super Cache', 'author-post-guard' ),
+            'admin.php?page=autoptimize' => __( 'Autoptimize', 'author-post-guard' ),
+            
+            // Security Plugins
+            'admin.php?page=wordfence' => __( 'Wordfence Security', 'author-post-guard' ),
+            'admin.php?page=sucuri' => __( 'Sucuri Security', 'author-post-guard' ),
+            'admin.php?page=itsec' => __( 'iThemes Security', 'author-post-guard' ),
+            
+            // Code & Snippets
+            'edit.php?post_type=snippets' => __( 'Code Snippets', 'author-post-guard' ),
+            
+            // WooCommerce
             'admin.php?page=wc-admin'  => __( 'WooCommerce', 'author-post-guard' ),
             'edit.php?post_type=shop_order' => __( 'Orders (WooCommerce)', 'author-post-guard' ),
             'edit.php?post_type=product' => __( 'Products (WooCommerce)', 'author-post-guard' ),
+            'admin.php?page=wc-settings' => __( 'WooCommerce Settings', 'author-post-guard' ),
+            
+            // File Manager
+            'admin.php?page=wp-file-manager-settings' => __( 'File Manager', 'author-post-guard' ),
         );
     }
 

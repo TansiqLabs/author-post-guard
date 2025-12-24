@@ -20,6 +20,8 @@
 
 **Author Post Guard** is a premium WordPress plugin designed for agencies, developers, and businesses who need complete control over their WordPress admin experience. It provides white-labeling capabilities, advanced menu management, webhook notifications, and automatic updates from GitHub.
 
+**Version 1.1.0** introduces comprehensive security features including admin-only access controls, direct URL blocking for hidden menus, and protected plugin pages for backup and security tools.
+
 ## ✨ Features
 
 ### 🎨 White Labeling & Branding
@@ -30,10 +32,28 @@
 - Media library restriction (users see only their uploads)
 - Complete brand consistency across the admin
 
-### 📋 Menu Management
+### 🔒 Security & Access Control
+- **Admin-Only Plugin Access**: Only administrators can access plugin settings
+- **Direct URL Blocking**: Hidden menus blocked even with direct URL access
+- **Protected Plugin Pages**: Backup plugins (UpdraftPlus, BackWPup, Duplicator) always admin-only
+- **Cache Plugin Protection**: LiteSpeed, WP Rocket, W3 Total Cache restricted to admins
+- **Security Plugin Protection**: Wordfence, Sucuri, iThemes Security admin-only
+- **File Manager Protection**: WP File Manager, Adminer, phpMyAdmin restricted
+- Comprehensive capability checks throughout
+
+### 📋 Menu Management (40+ Plugins Supported)
 - Hide specific menu items for different user roles
-- Support for popular plugins (Elementor, WPForms, Yoast SEO, LiteSpeed Cache, etc.)
-- Keep admin panel clean for editors/authors
+- **Form Plugins**: Contact Form 7, Ninja Forms, WPForms, Gravity Forms, Formidable Forms
+- **Page Builders**: Elementor, Divi, Beaver Builder, WPBakery, Oxygen, Bricks
+- **SEO Tools**: Yoast SEO, Rank Math, All in One SEO
+- **E-Commerce**: WooCommerce, Easy Digital Downloads, WP eCommerce
+- **Backup Tools**: UpdraftPlus, BackWPup, Duplicator, All-in-One WP Migration
+- **Cache Plugins**: LiteSpeed Cache, WP Rocket, W3 Total Cache, WP Super Cache
+- **Security**: Wordfence, Sucuri, iThemes Security, Solid Security
+- **Analytics**: MonsterInsights, Google Analytics, Matomo
+- **File Managers**: WP File Manager, File Manager, Simple File Manager
+- **Custom Fields**: Advanced Custom Fields, Pods, Toolset, Meta Box
+- **And many more...**
 - Administrator menus remain unaffected
 - Toggle-based intuitive interface
 
@@ -42,6 +62,7 @@
 - Custom JavaScript for admin functionality
 - Custom PHP code execution (admin only)
 - Safe code editor with syntax highlighting support
+- Real-time preview and testing
 
 ### 🔔 Advanced Notification System
 - **Discord Integration**: Send notifications via Discord webhooks
@@ -70,8 +91,9 @@
 
 ```
 author-post-guard/
-├── author-post-guard.php     # Main plugin file
+├── author-post-guard.php     # Main plugin file (v1.1.0)
 ├── README.md                  # Documentation
+├── LICENSE                    # MIT License
 ├── inc/
 │   ├── class-settings.php    # Settings page & UI
 │   ├── class-notifications.php # Webhook handlers
@@ -81,6 +103,15 @@ author-post-guard/
     ├── admin-script.js       # Frontend JavaScript
     └── logo.svg              # Plugin logo
 ```
+
+## 🔒 Security Features
+
+- **Admin-Only Access**: Plugin settings only accessible by administrators
+- **Direct URL Protection**: Hidden menus cannot be accessed via direct URL
+- **Role-Based Restrictions**: Granular control over menu visibility
+- **Media Library Isolation**: Users see only their own uploads
+- **Capability Checks**: All actions verify proper user permissions
+- **Protected Plugin Pages**: Backup, cache, and security plugins restricted to admins
 
 ## 🚀 Installation
 

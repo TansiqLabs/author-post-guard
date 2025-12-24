@@ -3,7 +3,7 @@
  * Plugin Name: Author Post Guard
  * Plugin URI: https://github.com/TansiqLabs/author-post-guard
  * Description: A premium white-label solution for WordPress branding, menu control, and advanced notifications by Tansiq Labs.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Tansiq Labs
  * Author URI: https://tansiqlabs.com
  * License: MIT
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Constants
  */
-define( 'APG_VERSION', '1.0.0' );
+define( 'APG_VERSION', '1.1.0' );
 define( 'APG_PLUGIN_FILE', __FILE__ );
 define( 'APG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'APG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -130,6 +130,7 @@ final class Author_Post_Guard {
         // Menu control hooks
         add_action( 'admin_menu', array( $this, 'control_admin_menu' ), 999 );
         add_action( 'admin_init', array( $this, 'control_admin_submenus' ), 999 );
+        add_action( 'admin_init', array( $this, 'block_direct_access' ), 1 );
 
         // Media library restrictions
         add_filter( 'ajax_query_attachments_args', array( $this, 'restrict_media_library' ) );
@@ -163,7 +164,12 @@ final class Author_Post_Guard {
             'custom_footer_text'    => 'Powered by Tansiq Labs',
             'login_logo_enabled'    => true,
             'adminbar_logo_enabled' => true,
+            'custom_logo_url'       => '',
+            'restrict_media_library'=> false,
             'hidden_menus'          => array(),
+            'custom_css'            => '',
+            'custom_js'             => '',
+            'custom_php'            => '',
             'discord_webhook'       => '',
             'telegram_bot_token'    => '',
             'telegram_chat_id'      => '',
@@ -173,6 +179,7 @@ final class Author_Post_Guard {
             'notify_user_registered'=> true,
             'github_repo'           => 'TansiqLabs/author-post-guard',
             'auto_update_enabled'   => true,
+            'github_access_token'   => '',
         );
 
         $existing = get_option( 'apg_settings', array() );
@@ -363,7 +370,7 @@ final class Author_Post_Guard {
         $hidden  = isset( $options['hidden_menus'] ) ? $options['hidden_menus'] : array();
         $user    = wp_get_current_user();
         
-        // Don't hide menus from administrators unless specifically set
+        // Don't hide menus from administrators
         if ( in_array( 'administrator', (array) $user->roles, true ) ) {
             return;
         }
@@ -372,6 +379,94 @@ final class Author_Post_Guard {
             if ( isset( $hidden[ $role ] ) && is_array( $hidden[ $role ] ) ) {
                 foreach ( $hidden[ $role ] as $menu_slug ) {
                     remove_menu_page( $menu_slug );
+                }
+            }
+        }
+    }
+
+    /**
+     * Block direct URL access to hidden menu pages
+     *
+     * @return void
+     */
+    public function block_direct_access() {
+        // Only check for non-administrators
+        if ( current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        $options = get_option( 'apg_settings', array() );
+        $hidden  = isset( $options['hidden_menus'] ) ? $options['hidden_menus'] : array();
+        $user    = wp_get_current_user();
+        
+        if ( empty( $hidden ) || ! is_array( $hidden ) ) {
+            return;
+        }
+
+        // Get current page
+        global $pagenow;
+        $current_page = $pagenow;
+        
+        // Add query string for admin.php pages
+        if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) ) {
+            $current_page = 'admin.php?page=' . sanitize_text_field( $_GET['page'] );
+        }
+        
+        // Add post_type for edit.php pages
+        if ( 'edit.php' === $pagenow && isset( $_GET['post_type'] ) ) {
+            $current_page = 'edit.php?post_type=' . sanitize_text_field( $_GET['post_type'] );
+        }
+
+        // Check if current page is hidden for user's role
+        foreach ( $user->roles as $role ) {
+            if ( isset( $hidden[ $role ] ) && is_array( $hidden[ $role ] ) ) {
+                if ( in_array( $current_page, $hidden[ $role ], true ) ) {
+                    wp_die( 
+                        __( 'You do not have permission to access this page.', 'author-post-guard' ),
+                        __( 'Access Denied', 'author-post-guard' ),
+                        array( 'response' => 403 )
+                    );
+                }
+            }
+        }
+        
+        // Additional check for specific plugin pages that should be admin-only
+        $admin_only_pages = array(
+            // Backup plugins
+            'updraftplus',
+            'backwpup',
+            'duplicator',
+            'backup',
+            
+            // Cache plugins
+            'litespeed',
+            'wprocket',
+            'w3tc',
+            'wpsupercache',
+            'autoptimize',
+            
+            // Security plugins
+            'wordfence',
+            'sucuri',
+            'itsec',
+            
+            // File manager
+            'wp-file-manager',
+            
+            // Database & System
+            'phpmyadmin',
+            'adminer',
+        );
+        
+        if ( isset( $_GET['page'] ) ) {
+            $page_slug = sanitize_text_field( $_GET['page'] );
+            foreach ( $admin_only_pages as $admin_page ) {
+                if ( strpos( $page_slug, $admin_page ) !== false ) {
+                    wp_die( 
+                        __( 'You do not have permission to access this page.', 'author-post-guard' ),
+                        __( 'Access Denied', 'author-post-guard' ),
+                        array( 'response' => 403 )
+                    );
                 }
             }
         }
@@ -440,6 +535,13 @@ final class Author_Post_Guard {
      */
     public function output_custom_css() {
         $options = get_option( 'apg_settings', array() );
+        
+        // Inject custom logo URL as CSS variable for admin bar
+        $custom_logo = ! empty( $options['custom_logo_url'] ) ? $options['custom_logo_url'] : '';
+        if ( ! empty( $custom_logo ) && ! empty( $options['adminbar_logo_enabled'] ) ) {
+            echo "<style type='text/css'>:root { --apg-adminbar-logo-url: url('" . esc_url( $custom_logo ) . "'); }</style>\n";
+        }
+        
         $custom_css = isset( $options['custom_css'] ) ? trim( $options['custom_css'] ) : '';
         
         if ( ! empty( $custom_css ) ) {

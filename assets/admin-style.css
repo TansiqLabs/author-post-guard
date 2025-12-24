@@ -868,7 +868,9 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url('../assets/logo.svg') no-repeat center;
+    background-image: var(--apg-adminbar-logo-url, url('../assets/logo.svg'));
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: contain;
     vertical-align: middle;
     margin-top: -2px;
